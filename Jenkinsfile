@@ -24,7 +24,7 @@ pipeline {
             }
         }
 
-        stage('Login & Push to Registry') {
+        /*stage('Login & Push to Registry') {
             steps {
                 script {
                     // Authenticate and securely push the background image to your repository
@@ -32,6 +32,26 @@ pipeline {
                         dockerImage.push()
                         dockerImage.push('latest')
                     }
+                }
+            }
+        }*/
+
+        stage('Login & Push to Registry') {
+            steps {
+                // We change the variable mappings to HUB_USER and HUB_TOKEN
+                withCredentials([usernamePassword(credentialsId: "${REGISTRY_CREDENTIALS_ID}",
+                                                 usernameVariable: 'HUB_USER',
+                                                 passwordVariable: 'HUB_TOKEN')]) {
+
+                    // Force a clean session state on the host first
+                    sh 'docker logout || true'
+
+                    // Log in using our freshly named variables wrapped securely in single quotes
+                    sh 'echo "$HUB_TOKEN" | docker login -u "$HUB_USER" --password-stdin'
+
+                    // Push your builds to Docker Hub
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker push ${IMAGE_NAME}:latest"
                 }
             }
         }
