@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REGISTRY_CREDENTIALS_ID = 'docker-hub-credentials'
-        IMAGE_NAME = 'your-dockerhub-username/product-notification-service'
+        IMAGE_NAME = 'balagrishnan/product-notification-service'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
