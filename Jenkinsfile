@@ -28,9 +28,12 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${REGISTRY_CREDENTIALS_ID}",
                                                  usernameVariable: 'HUB_USER',
                                                  passwordVariable: 'HUB_TOKEN')]) {
-                    // Changed 'sh' to 'bat' and modified syntax for Windows CMD
+                    // Force a clean context session first
                     bat 'docker logout || ver > nul'
-                    bat 'echo %HUB_TOKEN% | docker login -u %HUB_USER% --password-stdin'
+
+                    // This flag pattern passes the secret directly via memory parameters on Windows, avoiding space bugs entirely!
+                    bat 'docker login -u %HUB_USER% -p %HUB_TOKEN%'
+
                     bat "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                     bat "docker push ${IMAGE_NAME}:latest"
                 }
