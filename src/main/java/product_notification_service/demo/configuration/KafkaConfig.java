@@ -21,7 +21,7 @@ public class KafkaConfig {
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
-        System.out.println("kafaka server"+ bootstrapServers);
+        System.out.println("kafka server"+ bootstrapServers);
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers); // Use kafka-local:9092 if running inside Docker container
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
