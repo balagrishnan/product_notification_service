@@ -11,7 +11,8 @@ public class PriceUpdateConsumer {
 
     @KafkaListener(
             topics = "product-price-updates",
-            groupId = "product_price_notification_group_v3" // Use unique group IDs per functional requirement task
+            groupId = "product_price_notification_group_v3", // Use unique group IDs per functional requirement task
+            containerFactory = "kafkaListenerContainerFactory" // <-- CRITICAL: Connects it to your KafkaConfig bean!
     )
     public void consumePriceUpdate(
             @Payload String message,
