@@ -1,4 +1,4 @@
-package product_notification_service.demo.services;
+package product_notification_service.demo.consumer;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

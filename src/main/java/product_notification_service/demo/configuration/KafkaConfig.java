@@ -18,16 +18,20 @@ public class KafkaConfig {
     // This annotation forces Spring to pull the string out of application.properties
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+    @Value("${spring.kafka.consumer.group-id:product_notification_default_group}")
+    private String defaultGroupId;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
-        System.out.println("kafka server"+ bootstrapServers);
+        System.out.println("--> Connecting Notification Service to Kafka at: " + bootstrapServers);
+
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers); // Use kafka-local:9092 if running inside Docker container
+        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "product_processing_group");
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, defaultGroupId);
         configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
